@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Dashboard from './app/screens/DashboardScreen';
 import ErrorScreen from './app/screens/ErrorScreen';
 import FormScreen from './app/screens/FormScreen';
+import CategoryContextProvider from './services/category/CategoryContext';
 import LogContextProvider from './services/log/LogContext';
 import MessageContextProvider from './services/message/MessageContext';
 
@@ -24,11 +25,13 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <MessageContextProvider>
-      <LogContextProvider>
-        <RouterProvider router={router} />
-      </LogContextProvider>
-    </MessageContextProvider>
+    <CategoryContextProvider>
+      <MessageContextProvider>
+        <LogContextProvider>
+          <RouterProvider router={router} />
+        </LogContextProvider>
+      </MessageContextProvider>
+    </CategoryContextProvider>
   );
 }
 

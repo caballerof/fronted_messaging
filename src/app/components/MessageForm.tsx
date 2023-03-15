@@ -7,26 +7,13 @@ import { useContext } from 'react';
 import { defaultMessage } from '../../common/defaults';
 import { IMessage } from '../../common/types';
 import { messageValidation } from '../../common/validations';
+import { CategoryContext } from '../../services/category/CategoryContext';
 import { MessageContext } from '../../services/message/MessageContext';
 import AlertMessage from '../elements/AlertMessage';
 
-const currencies = [
-  {
-    value: 1,
-    label: 'Sports',
-  },
-  {
-    value: 2,
-    label: 'Finance',
-  },
-  {
-    value: 3,
-    label: 'Movies',
-  },
-];
-
 function MessageForm() {
   const { postMessage, isLoading } = useContext(MessageContext);
+  const { categories } = useContext(CategoryContext);
 
   return (
     <>
@@ -95,9 +82,9 @@ function MessageForm() {
                       sx: { marginTop: '6px' },
                     }}
                   >
-                    {currencies.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
                       </option>
                     ))}
                   </TextField>

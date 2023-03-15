@@ -1,10 +1,10 @@
 import camelize from 'camelize-ts';
 const host = import.meta.env.VITE_API_PATH;
-import { ILog } from '../../common/types';
+import { ICategory } from '../../common/types';
 
-const RESOURCE = 'logs';
+const RESOURCE = 'categories';
 
-export const retrieveLog = (): Promise<ILog[]> => {
+export const retrieveCategories = (): Promise<ICategory[]> => {
   const url = `${host}/${RESOURCE}`;
 
   return fetch(url, {
@@ -13,7 +13,7 @@ export const retrieveLog = (): Promise<ILog[]> => {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error getting log');
+        throw new Error('Error getting categories');
       }
 
       return response.json();
@@ -25,13 +25,13 @@ export const retrieveLog = (): Promise<ILog[]> => {
         throw new Error(message);
       }
 
-      return LogTransform(result);
+      return categoriesTransform(result);
     })
     .catch((error) => {
       throw new Error(error);
     });
 };
 
-export const LogTransform = (results: ILog[]) => {
-  return camelize(results) as ILog[];
+export const categoriesTransform = (results: ICategory[]) => {
+  return camelize(results) as ICategory[];
 };
