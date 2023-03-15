@@ -1,4 +1,8 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
+
+const wsHost = import.meta.env.VITE_WS_PATH;
 
 import { ILog } from '../../common/types';
 import { getErrorMessage } from '../../utils/handleError';
@@ -29,6 +33,8 @@ function LogContextProvider(props: ChildrenType) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const websocket = useRef();
+
   const handleError = (value: string | null) => {
     setError(value);
   };
@@ -50,6 +56,30 @@ function LogContextProvider(props: ChildrenType) {
 
   useEffect(() => {
     getLog();
+  }, []);
+
+  useEffect(() => {
+    websocket.current = new WebSocket(wsHost);
+
+    websocket.current.onopen = function (evt) {
+      console.log('Connection opened');
+    };
+
+    websocket.current.onclose = function (evt) {
+      console.log('Connection close');
+    };
+
+    websocket.current.onmessage = function (evt) {
+      if (evt.data.includes('time')) {
+        const data = JSON.parse(evt.data);
+
+        setLog((_log) => [data, ..._log]);
+      }
+    };
+
+    websocket.current.onerror = function (evt) {
+      console.log('Connection error');
+    };
   }, []);
 
   return (
