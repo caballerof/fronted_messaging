@@ -83,7 +83,7 @@ function MessageForm() {
                     }}
                   >
                     {categories.map((category) => (
-                      <option key={category.id} value={category.name}>
+                      <option key={category.id} value={category.id}>
                         {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
                       </option>
                     ))}
