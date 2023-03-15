@@ -23,7 +23,7 @@ export const mainListItems = (
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Categories Msg" />
+        <ListItemText primary="404 - layer 8" />
       </ListItemButton>
     </Link>
   </React.Fragment>

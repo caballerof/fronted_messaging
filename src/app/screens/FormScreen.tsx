@@ -1,6 +1,7 @@
 import { Paper } from '@mui/material';
 import Container from '@mui/material/Container';
 
+import { logColumns } from '../../common/ColumnsName';
 import LogTable from '../components/LogTable';
 import MessageForm from '../components/MessageForm';
 
@@ -22,7 +23,7 @@ function FormScreen() {
           maxWidth="xl"
           sx={{ my: { xs: 1, md: 1 }, p: { xs: 2, md: 1 } }}
         >
-          <LogTable />
+          <LogTable columnsName={logColumns} />
         </Container>
       </Paper>
     </>

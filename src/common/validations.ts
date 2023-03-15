@@ -11,7 +11,5 @@ Yup.setLocale({
 });
 
 export const messageValidation = Yup.object().shape({
-  text: Yup.string()
-    .matches(/^[a-zA-Z0-9 ]+$/g, 'Only alphanumeric characters')
-    .required(),
+  text: Yup.string().min(2, 'Insert at least 2 characters').required(),
 });

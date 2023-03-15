@@ -6,84 +6,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import * as React from 'react';
+import { useContext, useState } from 'react';
 
-interface Column {
-  id: 'id' | 'time' | 'user' | 'channel' | 'category';
-  label: string;
-  minWidth?: number;
-  align?: 'left' | 'right' | 'center';
-  format?: (value: number | string) => string;
-}
+import { IColumn } from '../../common/ColumnsName';
+import { LogContext } from '../../services/log/LogContext';
+import { generateLogRow } from '../../utils/format';
+import Loading from '../elements/Loading';
 
-const columns: readonly Column[] = [
-  { id: 'id', label: 'Id', minWidth: 50 },
-  {
-    id: 'time',
-    label: 'Date',
-    minWidth: 100,
-    align: 'center',
-    format: (value: string) => new Date(Number(value)).toLocaleString(),
-  },
-  {
-    id: 'user',
-    label: 'User',
-    minWidth: 170,
-    align: 'center',
-  },
-  {
-    id: 'channel',
-    label: 'Channel',
-    minWidth: 170,
-    align: 'center',
-  },
-  {
-    id: 'category',
-    label: 'Category',
-    minWidth: 170,
-    align: 'center',
-  },
-];
-
-interface Data {
-  id: number;
-  time: string;
-  user: string;
-  channel: string;
-  category: string;
-}
-
-function createData(
-  id: number,
-  time: string,
-  user: string,
-  channel: string,
-  category: string,
-): Data {
-  return { id, time, user, channel, category };
-}
-
-const rows = [
-  createData(1, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(2, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(3, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(4, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(5, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(6, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(7, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(8, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(9, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(10, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(11, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(12, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(13, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(14, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-  createData(15, '1678768776172', 'Caleb Langworth', 'Sports', 'email'),
-];
-
-function LogTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+function LogTable(props: { columnsName: readonly IColumn[] }) {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { log, isLoading } = useContext(LogContext);
+  const { columnsName } = props;
+  const rows = generateLogRow(log);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -94,13 +29,15 @@ function LogTable() {
     setPage(0);
   };
 
+  if (isLoading) return <Loading />;
+
   return (
     <Paper elevation={0} sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columnsName.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -117,7 +54,7 @@ function LogTable() {
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                    {columns.map((column) => {
+                    {columnsName.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>

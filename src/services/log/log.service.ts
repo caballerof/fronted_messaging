@@ -1,38 +1,38 @@
 import camelize from 'camelize-ts';
 const host = import.meta.env.VITE_API_PATH;
-import { IMessage } from '../../common/types';
+import { ILog } from '../../common/types';
 
-const RESOURCE = 'messages';
+const RESOURCE = 'logs';
 
-export const addMessage = (message: IMessage) => {
+export const retrieveLog = (): Promise<ILog[]> => {
   const url = `${host}/${RESOURCE}`;
 
   return fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(message),
+    method: 'GET',
     headers: { 'Content-type': 'application/json; charset=UTF-8' },
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error('Error posting message');
+        throw new Error('Error getting log');
       }
 
       return response.json();
     })
     .then((result) => {
+      console.log('🚀 ~ file: log.service.ts:22 ~ .then ~ result:', result);
       const { message, code } = result;
 
       if (code < 200 || code >= 300) {
         throw new Error(message);
       }
 
-      return messageAddTransform(result);
+      return LogTransform(result);
     })
     .catch((error) => {
       throw new Error(error);
     });
 };
 
-export const messageAddTransform = (results: IMessage) => {
-  return camelize(results) as IMessage;
+export const LogTransform = (results: ILog[]) => {
+  return camelize(results) as ILog[];
 };

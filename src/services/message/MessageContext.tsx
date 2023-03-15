@@ -5,7 +5,7 @@ import { getErrorMessage } from '../../utils/handleError';
 import { addMessage } from './message.service';
 
 type MessageContextInterface = {
-  postMessage: (user: IMessage) => Promise<void> | null;
+  postMessage: (data: IMessage) => void;
   setError: (value: string | null) => void;
   isLoading: boolean;
   error: string | null;
@@ -43,7 +43,6 @@ function MessageContextProvider(props: ChildrenType) {
 
       setMessage(text);
       setError(null);
-      return result;
     } catch (error) {
       setError(getErrorMessage(error));
     } finally {
